@@ -18,6 +18,514 @@ _Para llegar a ellas deberas ir desplegando cada una de las secciones hasta la p
 <p>
 <ol start= '1'>
 <li>
+<details><summary><i>Requisitos para dominar React</i></summary>
+<p>
+<ol>
+<li>
+<details><summary><i>¿JavaScript que necesitas para aprender React?</i></summary>
+<p>
+
+**Para aprender y dominar React necesitas saber JavaScript.** A diferencia de otros frameworks y bibliotecas, como *Angular* y *Vue*, que se basan en su propio *DSL* (Domain-Specific Language), React usa una extensión de la sintaxis de JavaScript llamada *JSX*. Más adelante lo veremos en detalle pero, al final, no deja de ser azúcar sintáctico para escribir menos JavaScript.
+
+**En React todo es JavaScript.** Para bien y para mal. Este libro da por sentados unos conocimientos previos del lenguaje de programación pero antes de empezar vamos a hacer un pequeño repaso por algunas de las características más importantes que necesitarás conocer.
+
+**Si ya dominas JavaScript puedes saltarte este capítulo** y continuar con el libro, pero recuerda que siempre podrás revisar este capítulo como referencia.
+
+##### EcmaScript Modules o ESModules
+
+Los **EcmaScript Modules** es la forma nativa que tiene JavaScript para importar y exportar variables, funciones y clases entre diferentes ficheros. Hoy en día, especialmente si trabajamos con un empaquetador de aplicaciones como Webpack, vamos a estar trabajando constantemente con esta sintaxis.
+
+Por un lado podemos crear módulos exportándolos por defecto:
+
+```js
+// sayHi.js
+// exportamos por defecto el módulo sayHi
+export default sayHi (message) {
+    console.log(message)
+}
+
+// index.js
+// este módulo lo podremos importar con el nombre que queramos
+import sayHi from './sayHi.js'
+
+// al ser el módulo exportado por defecto podríamos usar otro nombre
+import miduHi from './sayHi.js'
+```
+
+También podemos hacer exportaciones nombradas de módulos, de forma que un módulo tiene un nombre asignado y para importarlo necesitamos usar exactamente el nombre usado al exportarlo:
+
+```js
+// sayHi.js
+// podemos usar exportaciones nombradas para mejorar esto
+export const sayHi = (message) => console.log(message)
+
+// y se pueden hacer tantas exportaciones de módulos nombrados como queramos
+export const anotherHi = msg => alert(msg)
+
+// index.js
+// ahora para importar estos módulos en otro archivo podríamos hacerlo así
+import {sayHi, anotherHi} from './sayHi.js'
+```
+
+Los *imports* que hemos visto hasta aquí se conocen como *imports estáticos*. Esto significa que ese módulo será cargado en el momento de la carga del archivo que lo importa.
+
+También existen los *imports dinámicos*, de forma que podamos importar módulos que se carguen en el momento de la ejecución del programa o cuando nosotros decidamos (por ejemplo, como respuesta a un click).
+
+```js
+document.querySelector('button').addEventListener('click', () => {
+  // los imports dinámicos devuelven una Promesa
+  import('./sayHi.js').then(module => {
+    // ahora podemos ejecutar el módulo que hemos cargado
+    module.default('Hola')
+  })
+})
+```
+
+A> Los imports dinámicos son útiles también cuando trabajamos con empaquetadores como Webpack o Vite, ya que esto creará unos *chunks* (fragmentos) que se cargarán fuera del bundle general. ¿El objetivo? Mejorar el rendimiento de la aplicación.
+
+Existen más sintaxis para trabajar con módulos, pero con saber las que hemos visto ya sería suficiente para seguir el libro.
+
+**¿Por qué es importante**
+
+Para empezar React te ofrece diferentes partes de su biblioteca a través de módulos que podrás importar. Además nuestros componentes los tendremos separados en ficheros y, cada uno de ellos, se podrá importar utilizando *ESModules*.
+
+Además, por temas de optimización de rendimiento, podremos importar de forma dinámica componentes y así mejorar la experiencia de nuestros usuarios al necesitar cargar menos información para poder utilizar la página.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Operador condicional (ternario)</i></summary>
+<p>
+
+Las ternarias son una forma de realizar condiciones sin la necesidad de usar la sintaxis con `if`. Se podría decir que es una forma de atajo para evitar escribir tanto código.
+
+```js
+if (number % 2 === 0) {
+  console.log('Es par')
+} else {
+  console.log('Es impar')
+}
+
+// usando ternaria
+number % 2 === 0 ? console.log('Es par') : console.log('Es impar')
+```
+
+**¿Por qué es importante**
+
+En las interfaces gráficas es muy normal que, dependiendo del estado de la aplicación o los datos que nos lleguen, vamos a querer renderizar una cosa u otra en pantalla. Para realizar esto, en lugar de utilizar `if` se usan las ternarias ya que queda mucho más legible dentro del *JSX*.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Funciones flecha o Arrow Functions</i></summary>
+<p>
+
+Las *funciones flecha* o *arrow function* fueron añadidas a JavaScript en el estándar ECMAScript 6 (o ES2015). En principio parece que simplemente se trata de una sintaxis alternativa más simple a la hora de crear expresiones de funciones:
+
+```js
+const nombreDeLaFuncion = function (param1, param2) {
+  // instrucciones de la función
+}
+
+const nombreDeLaFuncion = (param1, param2) => { // con arrow function
+  // instrucciones de la función
+}
+```
+
+Pero además del cambio de sintaxis existen otras características de las funciones flechas que se usan constantemente en React.
+
+```js
+// return implícito al escribir una sola línea
+const getName = () => 'midudev'
+
+// ahorro de parentésis para función de un parámetro
+const duplicateNumber = num => num * 2
+
+// se usan mucho como callback en funciones de arrays
+const numbers = [2, 4, 6]
+const newNumbers = numbers.map(n => n / 2)
+console.log(newNumbers) // [1, 2, 3]
+```
+
+También tiene algunos cambios respecto al valor de `this` pero, aunque es aconsejable dominarlo, no es realmente necesario para poder seguir con garantías el libro.
+
+**¿Por qué es importante**
+
+Aunque hace unos años con React se trabajaba principalmente con clases, desde la irrupción de los hooks en la versión 16.8 ya no se usan mucho. Esto hace que se usen mucho más funciones.
+
+Las funciones flecha, además, puedes verlas fácilmente conviviendo dentro de tus componentes. Por ejemplo, a la hora de renderizar una lista de elementos ejecutarás el método `.map` del array y, como callback, seguramente usarás una función flecha anónima.
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Parámetros predeterminados (default values)</i></summary>
+<p>
+
+En JavaScript puedes proporcionar valores por defecto a los parámetros de una función en caso que no se le pase ningún argumento.
+
+```js
+// al parámetro b le damos un valor por defecto de 1
+function multiply(a, b = 1) {
+  return a * b;
+}
+
+// si le pasamos un argumento con valor, se ignora el valor por defecto
+console.log(multiply(5, 2)) // 10
+
+// si no le pasamos un argumento, se usa el valor por defecto
+console.log(multiply(5)) // 5
+
+// las funciones flecha también pueden usarlos
+const sayHi = (msg = 'Hola React!') => console.log(msg)
+sayHi() // 'Hola React!'
+```
+
+**¿Por qué es importante**
+
+En React existen dos conceptos muy importantes: **componentes y hooks**. No vamos a entrar en detalle ahora en ellos pero lo importante es que ambos son construidos con funciones.
+
+Poder añadir valores por defecto a los parámetros de esas funciones en el caso que no venga ningún argumento **es clave** para poder controlar React con éxito.
+
+Los componentes, por ejemplo, pueden no recibir parámetros y, pese a ello, seguramente vas a querer que tengan algún comportamiento por defecto. Lo podrás conseguir de esta forma.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Template Literals</i></summary>
+<p>
+
+Los template literals o plantillas de cadenas llevan las cadenas de texto al siguiente nivel permitiendo expresiones incrustadas en ellas.
+
+```js
+const inicio = 'Hola'
+const final = 'React'
+
+// usando una concatenación normal sería
+const mensaje = inicio + " " + final
+
+// con los template literals podemos evaluar expresiones
+const mensaje = `${inicio} ${final}`
+```
+
+Como ves, para poder usar los template literals, necesitas usar el símbolo ```
+
+Además, también nos permiten utilizar cadenas de texto de más de una línea.
+
+**¿Por qué es importante**
+
+En React esto se puede utilizar para diferentes cosas. No sólo es normal crear cadenas de texto para mostrar en la interfaz... también puede ser útil para crear clases para tus elementos HTML de forma dinámica. Verás que los template literales están en todas partes.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Propiedades abreviadas</i></summary>
+<p>
+
+Desde *ECMAScript 2015* se puede iniciar un objeto utilizado nombre de propiedades abreviadas. Esto es que si quieres utilizar como valor una variable que tiene el mismo nombre que la key, entonces puedes indicar la inicialización una vez:
+
+```js
+const name = 'Miguel'
+const age = 36
+const book = 'React'
+
+// antes haríamos esto
+const persona = { name: name, age: age, book: book }
+
+// ahora podemos hacer esto, sin repetir
+const persona = { name, age, book }
+```
+
+**¿Por qué es importante**
+
+En React se trata muchas veces con objetos y siempre vamos a querer escribir el menor número de líneas posible para mantener nuestro código fácil de mantener y entender.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>La desestructuración</i></summary>
+<p>
+
+La sintaxis de *desestructuración* es una expresión de JavaScript que permite extraer valores de Arrays o propiedades de objetos en distintas variables.
+
+```js
+// antes
+const array = [1, 2, 3]
+const primerNumero = array[0]
+const segundoNumero = array[1]
+
+// ahora
+const [primerNumero, segundoNumero] = array
+
+// antes con objetos
+const persona = { name: 'Miguel', age: 36, book: 'React' }
+const name = persona.name
+const age = persona.age
+
+// ahora con objetos
+const {age, name} = persona
+
+// también podemos añadir valores por defecto
+const {books = 2} = persona
+console.log(persona.books) // -> 2
+
+// también funciona en funciones
+const getName = ({name}) => `El nombre es ${name}`
+getName(persona)
+```
+
+**¿Por qué es importante**
+
+En React hay mucho código básico que da por sentado que conoces y dominas esta sintaxis. Piensa que los objetos y los arreglos son tipos de datos que son perfectos para guardar datos a representar en una interfaz. Así que poder tratarlos fácilmente te va a hacer la vida mucho más fácil.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Métodos de Array</i></summary>
+<p>
+Saber manipular arreglos en JavaScript es básico para considerar que se domina. Cada método realiza una operación en concreto y devuelve diferentes tipos de datos. Todos los métodos que veremos reciben un callback (función) que se ejecutará para cada uno de los elementos del array.
+
+Vamos a revisar algunos de los métodos más usados:
+
+```js
+// tenemos este array con diferentes elementos
+const networks = [
+  {
+    id: 'google',
+    url: 'http://www,google.com.ar',
+    needsUpdate: true
+  },
+  {
+    id: 'twitter',
+    url: 'https://twitter.com',
+    needsUpdate: true
+  },
+  {
+    id: 'instagram',
+    url: 'https://instagram.com',
+    needsUpdate: false
+  }
+]
+
+// con .map podemos transformar cada elemento
+// y devolver un nuevo array
+networks.map(singleNetwork => singleNetwork.url)
+// Resultado:
+  [
+    'http://www,google.com.ar',
+    'https://twitter.com',
+    'https://instagram.com'
+  ]
+
+// con .filter podemos filtrar elementos de un array que no
+// pasen una condición determinada por la función que se le pasa.
+// Devuelve un nuevo array.
+networks.filter(singleNetwork => singleNetwork.needsUpdate === true)
+// Resultado:
+[
+  { id: 'google', url: 'http://www,google.com.ar', needsUpdate: true },
+  { id: 'twitter', url: 'https://twitter.com', needsUpdate: true }
+]
+
+// con .find podemos buscar un elemento de un array que
+// cumpla la condición definida en el callback
+networks.find(singleNetwork => singleNetwork.id === 'google')
+// Resultado:
+{ id: 'google', url: 'http://www,google.com.ar', needsUpdate: true }
+
+// con .some podemos revisar si algún elemento del array cumple una condición
+networks.some(singleNetwork => singleNetwork.id === 'tiktok') // false
+networks.some(singleNetwork => singleNetwork.id === 'instagram') // true
+```
+
+**¿Por qué es importante**
+
+En React es muy normal almacenar los datos que tenemos que representar en la UI como array. Esto hace que muchas veces necesitemos tratarlos, filtrarlos o extraer información de ellos. Es primordial entender, conocer y dominar al menos estos métodos, ya que son los más usados.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Sintaxis Spread</i></summary>
+<p>
+
+La sintaxis de spread nos permite expandir un iterable o un objeto en otro lugar dónde se espere esa información. Para poder utilizarlo, necesitamos utilizar los tres puntos suspensivos `...` justo antes.
+
+```js
+const networks = ['Twitter', 'Twitch', 'Instagram']
+const newNetwork = 'Tik Tok'
+// creamos un nuevo array expandiendo el array networks y
+// colocando al final el elemento newNetwork
+// utilizando la sintaxis de spread
+const allNetworks = [...networks, newNetwork]
+console.log(allNetworks)
+// -> [ 'Twitter', 'Twitch', 'Instagram', 'Tik Tok' ]
+```
+
+Esto mismo lo podemos conseguir con un objeto, de forma que podemos expander todas sus propiedades en otro objeto de forma muy sencilla.
+
+```js
+const kape = { name: 'Daniel', twitter: '@kapelu' }
+const kapeWithNewInfo = {
+  ...kape,
+  youtube: 'https://youtube.com/kapelu',
+  books: ['Aprende React']
+}
+console.log(kapeWithNewInfo)
+// {
+//   name: 'Daniel',
+//   twitter: '@kapelu',
+//   youtube: 'https://youtube.com/kapelu',
+//   books: [ 'Aprende React' ]
+// }
+```
+
+Es importante notar que esto hace una copia, sí, pero superficial. Si tuviéramos objetos anidados dentro del objeto entonces deberíamos tener en cuenta que podríamos mutar la referencia. Veamos un ejemplo.
+
+```js
+const kape = {
+  name: 'Daniel',
+  twitter: '@kapelu',
+  experience: {
+    years: 18,
+    focus: 'javascript'
+  }
+}
+
+const kapeWithNewInfo = {
+  ...kape,
+  youtube: 'https://youtube.com/kapelu',
+  books: ['Aprende React']
+}
+
+// cambiamos un par de propiedades de la "copia" del objeto
+kapeWithNewInfo.name = 'Daniel Ángel'
+kapeWithNewInfo.experience.years = 19
+
+// hacemos un console.log del objeto inicial
+console.log(kape)
+
+// en la consola veremos que el nombre no se ha modificado
+// en el objeto original pero los años de experiencia sí
+// ya que hemos mutado la referencia original
+// {
+//   name: 'Daniel',
+//   twitter: '@kapelu',
+//   experience: { years: 19, focus: 'javascript' }
+// }
+```
+
+**¿Por qué es importante**
+
+En React es muy normal tener que añadir nuevos elementos a un array o crear nuevos objetos sin necesidad de mutarlos. El operador Rest nos puede ayudar a conseguir esto. Si no conoces bien el concepto de valor y referencia en JavaScript, sería conveniente que lo repases.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Operador Rest</i></summary>
+<p>
+
+La sintaxis `...` hace tiempo que funciona en JavaScript en los parámetros de una función. A esta técnica se le llamaba *parámetros rest* y nos permitía tener un número indefinido de argumentos en una función y poder acceder a ellos después como un array.
+
+```js
+function suma(...allArguments) {
+  return allArguments.reduce((previous, current) => {
+    return previous + current
+  })
+}
+```
+
+Ahora el operador rest también se puede utilizar para agrupar el resto de propiedades un objeto o iterable. Esto puede ser útil para extraer un elemento en concreto del objeto o el iterable y crear una copia superficial del resto en una nueva variable.
+
+```js
+const kape = {
+  name: 'Daniel',
+  twitter: '@kapelu',
+  experience: {
+    years: 18,
+    focus: 'javascript'
+  }
+}
+
+const {name, ...restOfkape} = kape
+
+console.log(restOfkape)
+// -> {
+//   twitter: '@kapelu',
+//   experience: {
+//     years: 18,
+//     focus: 'javascript'
+//   }
+// }
+```
+
+También podría funcionar con arrays:
+
+```js
+const [firstNumber, ...restOfNumbers] = [1, 2, 3]
+console.log(firstNumber) // -> 1
+console.log(restOfNumbers) // -> [2, 3]
+```
+
+**¿Por qué es importante**
+
+Es una forma interesante de *eliminar* (de forma figurada) una propiedad de un objeto y creando una copia superficial del resto de propiedades. A veces puede ser interesante para extraer la información que queremos de unos parámetros y dejar el resto en un objeto que pasaremos hacia otro nivel.
+
+</p>
+</details>
+</li>
+<li>
+<details><summary><i>Encadenamiento opcional (Optional Chaining)</i></summary>
+<p>
+El operador de encadenamiento opcional `?.` te permite leer con seguridad el valor de una propiedad que está anidada dentro de diferentes niveles de un objeto.
+
+De esta forma, en lugar de revisar si las propiedades existen para poder acceder a ellas, lo que hacemos es usar el encadenamiento opcional.
+
+```js
+const author = {
+  name: 'Daniel',
+  libro: {
+    name: 'Aprendiendo React'
+  },
+  writeBook() {
+    return 'Writing!'
+  }
+};
+
+// sin optional chaining
+(author === null || author === undefined)
+    ? undefined
+    : (author.libro === null || author.libro === undefined)
+    ? undefined
+    : author.libro.name 
+
+// con optional chaining
+author?.libro?.name
+```
+
+**¿Por qué es importante**
+
+Un objeto es una estructura de datos que es perfecta a la hora de representar muchos elementos de la UI. ¿Tienes un artículo? Toda la información de un artículo seguramente la tendrás representada en un objeto.
+
+Conforme tu UI sea más grande y compleja, estos objetos tendrán más información y necesitarás dominar el encadenamiento opcional `?.` para poder acceder a su información con garantías.
+
+</p>
+</details>
+<br>
+</ol>
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
 <details><summary><i>¿Qué es React?</i></summary>
 <p>
 
@@ -247,6 +755,147 @@ Las props son una forma de parametrizar nuestros componentes igual que hacemos c
 
 ---
 <li>
+<details><summary><i>¿Qué diferencia hay entre props y state?</i></summary>
+<p>
+
+Las *props* son un objeto que **se pasan como argumentos de un componente padre a un componente hijo**. Son inmutables y no se pueden modificar desde el componente hijo.
+
+El *state* es un valor que **se define dentro de un componente**. Su valor es inmutable (no se puede modificar directamente) pero se puede establecer un valor nuevo del estado para que React vuelva a renderizar el componente.
+
+Así que mientras que tanto *props* como *state* afectan al renderizado del componente, su gestión es diferente.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué es y para qué sirve la prop `children` en React?</i></summary>
+<p>
+
+La prop `children` es una prop especial que se pasa a los componentes. Es un objeto que contiene los elementos que envuelve un componente.
+
+Por ejemplo, si tenemos un componente `Card` que muestra una tarjeta con un título y un contenido, podemos usar la prop `children` para mostrar el contenido:
+
+```jsx
+function Card(props) {
+  return (
+    <div className="card">
+      <h2>{props.title}</h2>
+      <div>{props.children}</div>
+    </div>
+  )
+}
+```
+
+Y luego podemos usarlo de la siguiente forma:
+
+```jsx
+<Card title="Título de la tarjeta">
+  <p>Contenido de la tarjeta</p>
+</Card>
+```
+
+En este caso, la prop `children` contiene el elemento `<p>Contenido de la tarjeta</p>`.
+
+Conocer y saber usar la prop `children` es muy importante para crear componentes reutilizables en React.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Se puede inicializar un estado con el valor de una prop? ¿Qué pasa si lo haces y qué hay que tener en cuenta?</i></summary>
+<p>
+
+Sí, se puede inicializar el estado con el valor de una prop. Pero hay que tener en cuenta que, si la prop cambia, el estado no se actualizará automáticamente. Esto es porque el estado se inicializa una vez, cuando el componente se monta por primera vez.
+
+Por ejemplo, con componentes funcionales:
+
+```jsx
+const Counter = () => {
+  const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <Count count={count} />
+      <button onClick={() => setCount(count + 1)}>Aumentar</button>
+    </div>
+  )
+}
+
+const Count = ({ count }) => {
+  const [number, setNumber] = useState(count)
+
+  return <p>{number}</p>
+}
+```
+
+En este caso, el componente `Count` inicializa su estado con el valor de la prop `count`. Pero si cambia el valor de la prop `count`, el estado no se actualizará automáticamente. Por lo que al hacer click, siempre veremos el número 0 en pantalla.
+POR EJEMPLO:
+
+```jsx
+import * as React from 'react';
+import { useState } from 'react';
+import './style.css';
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <Count count={count} />
+      <button onClick={() => setCount(count + 1)}>Aumentar</button>
+    </div>
+  );
+};
+
+const Count = ({ count }) => {
+  const [number, setNumber] = useState(count);
+
+  return <p>{number}</p>;
+};
+
+export default function App() {
+  return (
+    <div>
+      <Counter />
+    </div>
+  );
+}
+```
+
+En este ejemplo, lo mejor sería simplemente usar la prop `count` en el componente `Count` y así siempre se volvería a renderizar.
+
+**Es una buena práctica evitar al máximo los estados de nuestros componentes y, siempre que se pueda, simplemente calcular el valor a mostrar a partir de las props.**
+
+En el caso que necesites inicializar un estado con una prop, es una buena práctica es añadir el prefijo de `initial` a la prop para indicar que es el valor inicial del estado y que luego no lo usaremos más:
+
+```jsx
+const Input = ({ initialValue }) => {
+  const [value, setValue] = useState(initialValue)
+
+  return (
+    <input
+      value={value}
+      onChange={e => setValue(e.target.value)}
+    />
+  )
+}
+```
+
+Es un error muy común pensar que la prop actualizará el estado, así que tenlo en cuenta.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
 <details><summary><i>¿Qué es el renderizado condicional en React?</i></summary>
 <p>
 
@@ -280,7 +929,7 @@ Tiene sentido, si el length es positivo (mayor a cero) renderizamos el map. !Pue
 
 ---
 <li>
-<details><summary><i>¿Cómo puedes aplicar clases CSS a un componente en React?</i></summary>
+<details><summary><i>¿Cómo puedes aplicar clases CSS a un componente en React y por qué no se puede usar <strong>class</strong>?</i></summary>
 <p>
 
 Para aplicar clases CSS a un componente en React usamos la prop `className`:
@@ -410,6 +1059,46 @@ El elemento `li` tiene una prop `key` que es un identificador único para cada e
 
 ---
 <li>
+<details><summary><i>¿Cómo puedes escribir comentarios en React?</i></summary>
+<p>
+
+Si vas a escribir un comentario fuera del renderizado de un componente, puedes usar la sintaxis de comentarios de JavaScript sin problemas:
+
+```jsx
+function Button({ text }) {
+  // Esto es un comentario
+  /* Esto es un comentario
+  de varias líneas */
+
+  return (
+    <button>
+      {text}
+    </button>
+  )
+}
+```
+
+Si vas a escribir un comentario dentro del renderizado de un componente, debes envolver el comentario en llaves y usar siempre la sintaxis de comentarios de bloque:
+
+```jsx
+function Button({ text }) {
+  return (
+    <button>
+      {/* Esto es un comentario en el render */}
+      {text}
+    </button>
+  )
+}
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+
+<li>
 <details><summary><i>¿Cómo añadir un evento a un componente en React?</i></summary>
 <p>
 
@@ -433,6 +1122,47 @@ En este caso, el componente `Button` recibe una prop `onClick` que es una funci�
 <br>
 
 ---
+<li>
+<details><summary><i>¿Cómo puedo pasar un parámetro a una función que maneja un evento en React?</i></summary>
+<p>
+
+Para pasar un parámetro a una función que maneja un evento en React podemos usar una función anónima:
+
+```jsx
+function Button({ id, text, onClick }) {
+  return (
+    <button onClick={() => onClick(id)}>
+      {text}
+    </button>
+  )
+}
+```
+
+Cuando el usuario hace clic en el botón, se ejecuta la función `onClick` pasándole como parámetro el valor de la prop `id`.
+
+También puedes crear una función que ejecuta la función `onClick` pasándole el valor de la prop `id`:
+
+```jsx
+function Button({ id, text, onClick }) {
+  const handleClick = (event) => { // handleClick recibe el evento original
+    onClick(id)
+  }
+
+  return (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+}
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+
 <li>
 <details><summary><i>¿Qué es el estado en React?</i></summary>
 <p>
@@ -558,6 +1288,122 @@ function Counter() {
 
 ---
 <li>
+<details><summary><i>¿Qué significa la expresión "subir el estado"?</i></summary>
+<p>
+
+Cuando varios componentes necesitan compartir los mismos datos de un estado, entonces se recomienda elevar ese estado compartido hasta su ancestro común más cercano.
+
+Dicho de otra forma. Si dos componentes hijos comparten los mismos datos de su padre, entonces mueve el estado al padre en lugar de mantener un estado local en sus hijos.
+
+Para entenderlo, lo mejor es que lo veamos con un ejemplo. Imagina que tenemos una lista de regalos deseados y queremos poder añadir regalos y mostrar el total de regalos que hay en la lista.
+
+```jsx
+import { useState } from 'react'
+
+export default function App () {
+  return (
+    <>
+      <h1>Lista de regalos</h1>
+      <GiftList />
+      <TotalGifts />
+    </>
+  )
+}
+
+function GiftList () {
+  const [gifts, setGifts] = useState([])
+
+  const addGift = () => {
+    const newGift = prompt('¿Qué regalo quieres añadir?')
+    setGifts([...gifts, newGift])
+  }
+
+  return (
+    <>
+      <h2>Regalos</h2>
+      <ul>
+        {gifts.map(gift => (
+          <li key={gift}>{gift}</li>
+        ))}
+      </ul>
+      <button onClick={addGift}>Añadir regalo</button>
+    </>
+  )
+}
+
+function TotalGifts () {
+  const [totalGifts, setTotalGifts] = useState(0)
+
+  return (
+    <>
+      <h2>Total de regalos</h2>
+      <p>{totalGifts}</p>
+    </>
+  )
+}
+```
+
+¿Qué pasa si queremos que el total de regalos se actualice cada vez que añadimos un regalo? Como podemos ver, no es posible porque el estado de `totalGifts` está en el componente `TotalGifts` y no en el componente `GiftList`. Y como no podemos acceder al estado de `GiftList` desde `TotalGifts`, no podemos actualizar el estado de `totalGifts` cuando añadimos un regalo.
+
+Tenemos que subir el estado de `gifts` al componente padre `App` y le pasaremos el número de regalos como prop al componente `TotalGifts`.
+
+```jsx
+import { useState } from 'react'
+
+export default function App () {
+  const [gifts, setGifts] = useState([])
+
+  const addGift = () => {
+    const newGift = prompt('¿Qué regalo quieres añadir?')
+    setGifts([...gifts, newGift])
+  }
+
+  return (
+    <>
+      <h1>Lista de regalos</h1>
+      <GiftList gifts={gifts} addGift={addGift} />
+      <TotalGifts totalGifts={gifts.length} />
+    </>
+  )
+}
+
+function GiftList ({ gifts, addGift }) {
+  return (
+    <>
+      <h2>Regalos</h2>
+      <ul>
+        {gifts.map(gift => (
+          <li key={gift}>{gift}</li>
+        ))}
+      </ul>
+      <button onClick={addGift}>Añadir regalo</button>
+    </>
+  )
+}
+
+function TotalGifts ({ totalGifts }) {
+  return (
+    <>
+      <h2>Total de regalos</h2>
+      <p>{totalGifts}</p>
+    </>
+  )
+}
+```
+
+Con esto, lo que hemos hecho es *elevar el estado*. Lo hemos movido desde el componente `GiftList` al componente `App`. Ahora pasamos como prop los regalos al componente `GiftList` y una forma de actualizar el estado, y también hemos pasado como prop al componente `TotalGifts` el número de regalos.
+<br>
+
+- [Código de ejemplo](https://stackblitz.com/edit/react-ts-qitkys?file=App.tsx)
+
+</p>
+</details>
+</li>
+<br>
+
+---
+
+<li>
 <details><summary><i>¿Qué hace el hook <strong>useEffect</strong>?</i></summary>
 <p>
 
@@ -648,6 +1494,77 @@ function Window() {
 
 ---
 <li>
+<details><summary><i>¿Qué hace el hook <strong>useId</strong>?</i></summary>
+<p>
+
+`useId` es un hook para generar identificadores únicos que se pueden pasar a los atributos de las etiquetas HTML y es especialmente útil para accesibilidad.
+
+Llama `useId` en el nivel superior del componente para generar una ID única:
+
+```jsx
+import { useId } from 'react'
+function PasswordField() {
+  const passwordHintId = useId()
+  // ...
+```
+
+A continuación, pasa el ID generado a diferentes atributos:
+
+```jsx
+<>
+  <input type="password" aria-describedby={passwordHintId} />
+  <p id={passwordHintId}>
+</>
+```
+
+La etiqueta `aria-describedby` te permite especificar que dos etiquetas están relacionadas entre sí, puede generar una identificación única con useId donde incluso si `PasswordField` aparece varias veces en la pantalla, las identificaciones generadas no chocarán.
+
+El ejemplo completo sería así:
+
+```jsx
+import { useId } from 'react'
+
+function PasswordField() {
+  const passwordHintId = useId()
+
+  return (
+    <>
+      <label>
+        Password:
+        <input
+          type="password"
+          aria-describedby={passwordHintId}
+        />
+      </label>
+      <p id={passwordHintId}>
+        El password debe ser de 18 letras y contener caracteres especiales
+      </p>
+    </>
+  )
+}
+
+export default function App() {
+  return (
+    <>
+      <h2>Choose password</h2>
+      <PasswordField />
+      <h2>Confirm password</h2>
+      <PasswordField />
+    </>
+  )
+}
+```
+
+Como ves en `App` estamos usando el componente dos veces. Si pusieramos una id a mano, por ejemplo `password`, entonces la ID no sería única y quedaría duplicada. Por eso es importante que generes la ID automáticamente con `useId`.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+
+<li>
 <details><summary><i>¿Cómo podemos ejecutar código cuando el componente se monta?</i></summary>
 <p>
 
@@ -714,24 +1631,180 @@ function App() {
 
 ---
 <li>
-<details><summary><i>¿Cómo puedes inicializar un proyecto de React desde cero?</i></summary>
+<details><summary><i>¿Por qué es recomendable usar Fragment en vez de un div?</i></summary>
 <p>
 
-Existen diversas formas de inicializar un proyecto de React desde cero. Una de las formas más sencillas es usando [Vite](https://vitejs.dev/guide/#scaffolding-your-first-vite-project).
+Las razones por las que es recomendable usar Fragment en vez de un `div` a la hora de envolver varios elementos son:
 
-```bash
-npm create vite@latest your-react-app-name -- --template react
-```
-
-> Vite es un empaquetador de aplicaciones web. Se encarga de resolver las dependencias de tu proyecto, levantar un entorno de desarrollo que se refresca automáticamente con cada cambio y de empaquetar tu aplicación para producción con todos los archivos estáticos necesarios.
-
+- Los `div` añaden un elemento extra al DOM, mientras que los Fragments no. Esto hace que el número de elementos HTML y la profundidad del DOM sea menor.
+- Los elementos envueltos con Fragment son afectados directamente por las propiedades *flex* o *grid* de CSS de su elemento padre. Si usas un `div` es posible que tengas problemas con el alineamiento de los elementos.
+- Los Fragments son más rápidos que los `div` ya que no tienen que ser renderizados.
+- Los `div` aplican CSS por defecto (hace que lo que envuelve el `div` se comporte como un bloque al aplicar un `display: block`) mientras que los Fragment no aplican ningún estilo por defecto.
 
 </p>
 </details>
 </li>
 <br>
+
+---
+<li>
+<details><summary><i>¿Qué es el Compound Components Pattern?</i></summary>
+<p>
+
+Es un patrón de diseño de componentes que se basa en crear un componente padre con un solo objetivo, proporcionarle a sus hijos las propiedades necesarias para que se rendericen sin problemas.
+
+Permite una estructura declarativa a la hora de construir nuevos componentes, además ayuda a la lectura del código por su simplicidad y limpieza.
+
+Un ejemplo de este diseño sería una lista que renderiza los elementos hijos:
+
+```jsx
+<List>
+  <ListItem>Cat</ListItem>
+  <ListItem>Dog</ListItem>
+</List>
+```
+
+```jsx
+const List = ({ children, ...props }) => (
+  <ul {...props} >
+    {children}
+  </ul>
+);
+
+const ListItem = ({ children, ...props }) => {
+
+  return (
+    <li {...props}>
+      {children}
+    </li>
+  );
+};
+
+export { List, ListItem };
+```
+
+Este es un ejemplo sencillo, pero los componentes pueden ser tan complejos como quieras y tanto el padre como los hijos pueden tener sus propios estados.
+
+Enlaces de interés:
+
+- [Lleva tu React al siguiente nivel con Compound Pattern by dezkareid en el blog de Platzi](https://platzi.com/blog/lleva-tu-react-al-siguiente-nivel-con-compound-pattern/?utm_source=twitter&utm_medium=organic&utm_campaign=PLA_TW_BLOG_202205_react_compound_pattern)
+
+- [Compound Components by Jenna Smith](https://jjenzz.com/compound-components) <strong>en inglés</strong>
+- [Compound Components Lesson by Kent C. Dodds](https://egghead.io/lessons/react-write-compound-components) <strong>en inglés</strong>
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cómo puedes inicializar un proyecto de React desde cero?</i></summary>
+<p>
+
+Existen diversas formas de inicializar un proyecto de React desde cero. Entre las más populares están:
+
+- [Vite](https://vitejs.dev/guide/#scaffolding-your-first-vite-project)
+
+```bash
+npm create vite@latest my-app -- --template react
+```
+
+- [Create React App](https://create-react-app.dev/docs/getting-started)
+
+```bash
+npx create-react-app my-app
+```
+
+> La opción más popular y recomendada hoy en día es Vite. <small>Fuente [npm trends](https://npmtrends.com/@vitejs/plugin-react-vs-create-react-app).</small>
+
+Usando un Framework, entre las más populares están:
+
+- [Nextjs](https://nextjs.org/docs/getting-started)
+
+```bash
+npx create-next-app@latest my-app
+```
+
+- [Gatsby](https://www.gatsbyjs.com/docs/quick-start/)
+
+```bash
+npm init gatsby
+```
+
+> La opción más popular y recomendada hoy en día es Nextjs. <small>Fuente [npm trends](https://npmtrends.com/gatsby-vs-next)</small>
+
+Cada uno de ellos es un empaquetador de aplicaciones web. Se encargan de resolver las dependencias de tu proyecto, levantar un entorno de desarrollo que se refresca automáticamente con cada cambio y de empaquetar tu aplicación para producción con todos los archivos estáticos necesarios y mucho más.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+
+<br>
 </ol>
 </details>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ---
 <h2>Intermedio</h2>
@@ -741,9 +1814,554 @@ npm create vite@latest your-react-app-name -- --template react
 <p>
 <ol start= '1'>
 <li>
+<details><summary><i>¿Cuántos <strong>useEffect</strong> puede tener un componente?</i></summary>
+<p>
+
+Aunque normalmente los componentes de React solo cuentan con un `useEffect` lo cierto es que podemos tener tantos `useEffect` como queramos en un componente. Cada uno de ellos se ejecutará cuando se renderice el componente o cuando cambien las dependencias del efecto.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cómo podemos ejecutar código cuando el componente se desmonta del árbol?</i></summary>
+<p>
+
+Podemos ejecutar código cuando el componente se desmonta usando el hook `useEffect` y dentro devolver una función con el código que queremos ejecutar. En este caso, la función que se pasa como primer parámetro del `useEffect` se ejecutará cuando el componente se monte, y la función que es retornada se ejecutará cuando se desmonte.
+
+```jsx
+import { useEffect } from 'react'
+
+function Component() {
+  useEffect(() => {
+    console.log('El componente se ha montado')
+
+    return () => {
+      console.log('El componente se ha desmontado')
+    }
+  }, [])
+
+  return <h1>Ejemplo</h1>
+}
+```
+
+Esto es muy útil para limpiar recursos que se hayan creado en el componente, como por ejemplo, eventos del navegador o para cancelar peticiones a APIs.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cómo puedes cancelar una petición a una API en <strong>useEffect</strong> correctamente?</i></summary>
+<p>
+
+Cuando hacemos una petición a una API, podemos cancelarla para evitar que se ejecute cuando el componente se desmonte usando `AbortController` como hacemos en este ejemplo:
+
+```jsx
+useEffect(() => {
+  // Creamos el controlador para abortar la petición
+  const controller = new AbortController()
+  // Recuperamos la señal del controlador
+  const { signal } = controller
+  // Hacemos la petición a la API y le pasamos como options la señal
+  fetch('https://jsonplaceholder.typicode.com/posts/1', { signal })
+    .then(res => res.json())
+    .then(json => setMessage(json.title))
+    .catch(error => {
+      // Si hemos cancelado la petición, la promesa se rechaza
+      // con un error de tipo AbortError
+      if (error.name !== 'AbortError') {
+        console.error(error.message)
+      }
+    })
+
+  // Si se desmonta el componente, abortamos la petición
+  return () => controller.abort()
+}, [])
+```
+
+Esto también funciona con `axios`:
+
+```jsx
+useEffect(() => {
+  // Creamos el controlador para abortar la petición
+  const controller = new AbortController()
+  // Recuperamos la señal del controlador
+  const { signal } = controller
+  // Hacemos la petición a la API y le pasamos como options la señal
+  axios
+    .get('https://jsonplaceholder.typicode.com/posts/1', { signal })
+    .then(res => setMessage(res.data.title))
+    .catch(error => {
+      // Si hemos cancelado la petición, la promesa se rechaza
+      // con un error de tipo AbortError
+      if (error.name !== 'AbortError') {
+        console.error(error.message)
+      }
+    })
+
+  // Si se desmonta el componente, abortamos la petición
+  return () => controller.abort()
+}, [])
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
 <details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
 <p>
 Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cuáles son las reglas de los hooks en React?</i></summary>
+<p>
+
+Los hooks en React tienen dos reglas fundamentales:
+
+- Los hooks solo se pueden usar en componentes funcionales o *custom hooks*.
+- Los hooks solo se pueden llamar en el nivel superior de un componente. No se pueden llamar dentro de bucles, condicionales o funciones anidadas.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué diferencia hay entre <strong>useEffect</strong> y <strong>useLayoutEffect</strong>?</i></summary>
+<p>
+
+Aunque ambos son muy parecidos, tienen una pequeña diferencia en el momento en el que se ejecutan.
+
+`useLayoutEffect` se ejecuta de forma síncrona inmediatamente después que React haya actualizado completamente el DOM tras el renderizado. Puede ser útil si necesitas recuperar un elemento del DOM y acceder a sus dimensiones o posición en pantalla.
+
+`useEffect` se ejecuta de forma asíncrona tras el renderizado, pero no asegura que el DOM se haya actualizado. Es decir, si necesitas recuperar un elemento del DOM y acceder a sus dimensiones o posición en pantalla, no podrás hacerlo con `useEffect` porque no tienes la garantía de que el DOM se haya actualizado.
+
+Normalmente, el 99% de las veces, vas a querer utilizar `useEffect` y, además, tiene mejor rendimiento, ya que no bloquea el renderizado.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué son mejores los componentes de clase o los componentes funcionales?</i></summary>
+<p>
+
+Desde que en *React 16.8.0* se incluyeron los hooks, los componentes de funciones pueden hacer casi todo lo que los componentes de clase.
+
+Aunque no hay una respuesta clara a esta pregunta, normalmente los componentes funcionales son más sencillos de leer y escribir y pueden tener un mejor rendimiento en general.
+
+Además, **los hooks solo se pueden usar en los componentes funcionales**. Esto es importante, ya que con la creación de custom hooks podemos reutilizar la lógica y podría simplificar nuestros componentes.
+
+Por otro lado, los componentes de clase nos permiten usar el ciclo de vida de los componentes, algo que no podemos hacer con los componentes funcionales donde solo podemos usar `useEffect`.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cómo mantener los componentes puros y qué ventajas tiene?</i></summary>
+<p>
+
+Los componentes puros son aquellos que no tienen estado y que no tienen efectos secundarios. Esto quiere decir que no tienen ningún tipo de lógica que no sea la de renderizar la interfaz.
+
+Son más fáciles de testear y de mantener. Además, son más fáciles de entender porque no tienen lógica compleja.
+
+Para crear un componente puro en React usamos una function:
+
+```jsx
+function Button({ text }) {
+  return (
+    <button>
+      {text}
+    </button>
+  )
+}
+```
+
+En este caso, el componente `Button` recibe una prop `text` que es un string. El componente `Button` renderiza un botón con el texto que recibe en la prop `text`.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué es el Server Side Rendering y qué ventajas tiene?</i></summary>
+<p>
+
+El *Server Side Rendering* es una técnica que consiste en renderizar el HTML en el servidor y enviarlo al cliente. Esto nos permite que el usuario vea la interfaz de la aplicación antes de que se cargue el JavaScript.
+
+Esta técnica nos permite mejorar la experiencia de usuario y mejorar el SEO de nuestra aplicación.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Cómo puedes crear un Server Side Rendering con React desde cero?</i></summary>
+<p>
+
+Para crear un Server Side Rendering con React desde cero podemos usar el paquete `react-dom/server` que nos permite renderizar componentes de React en el servidor.
+
+Veamos un ejemplo de cómo crear un Server Side Rendering con React desde cero con Express:
+
+```jsx
+import express from 'express'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+
+const app = express()
+
+app.get('/', (req, res) => {
+  const html = renderToString(<h1>Hola mundo</h1>)
+  res.send(html)
+})
+```
+
+Esto nos devolverá el HTML de la aplicación al acceder a la ruta `/`.
+
+```html
+<h1 data-reactroot="">Hola mundo</h1>
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Puedes poner un ejemplo de efectos colaterales en React?</i></summary>
+<p>
+
+Igual que las funciones en JavaScript, los componentes de React también pueden tener *side effects* (efectos colaterales). Un efecto colateral significa que el componente manipula o lee información que no está dentro de su ámbito.
+
+Aquí puedes ver un ejemplo simple de un componente que tiene un efecto colateral. Un componente que lee y modifica una variable que está fuera del componente. Esto hace que sea imposible saber qué renderizará el componente cada vez que se use, ya que no sabemos el valor que tendrá `count`:
+
+```jsx
+let count = 0
+
+function Counter() {
+  count = count + 1
+
+  return (
+    <p>Contador: {count}</p>
+  )
+}
+
+export default function Counters() {
+  return (
+    <>
+      <Counter />
+      <Counter />
+      <Counter />
+    </>
+  )
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué diferencia hay entre componentes controlados y no controlados? ¿Qué ventajas y desventajas tienen?</i></summary>
+<p>
+
+A la hora de trabajar con formularios en React, tenemos dos tipos de componentes: los componentes controlados y los componentes no controlados.
+
+Los componentes controlados son aquellos que tienen un estado que controla el valor del componente. Por lo tanto, el valor del componente se actualiza cuando el estado cambia.
+
+La ventaja de este tipo de componentes es que son más fáciles de testear porque no dependen de la interfaz. También nos permiten crear validaciones muy fácilmente. La desventaja es que son más complejos de crear y mantener. Además, pueden tener un peor rendimiento, ya que provocan un re-renderizado cada vez que cambia el valor del input.
+
+Los componentes no controlados son aquellos que no tienen un estado que controle el valor del componente. El estado del componente lo controla el navegador de forma interna. Para conocer el valor del componente, tenemos que leer el valor del DOM.
+
+La ventaja de este tipo de componentes es que se cream de forma muy fácil y no tienes que mantener un estado. Además, el rendimiento es mejor, ya que no tiene que re-renderizarse al cambiar el valor del input. Lo malo es que hay que tratar más con el DOM directamente y crear código imperativo.
+
+```js
+// Controlado:
+const [value, setValue] = useState('')
+const handleChange = () => setValue(event.target.value)
+
+<input type="text" value={value} onChange={handleChange} />
+
+// No controlado:
+<input type="text" defaultValue="foo" ref={inputRef} />
+// Usamos `inputRef.current.value` para leer el valor del input
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué son los High Order Components (HOC)?</i></summary>
+<p>
+
+Los High Order Components son funciones que reciben un componente como parámetro y devuelven un componente.
+
+```jsx
+function withLayout(Component) {
+  return function(props) {
+    return <main>
+      <section>
+        <Component {...props} />
+      </section>
+    </main>
+  }
+}
+```
+
+En este caso, la función `withLayout` recibe un componente como parámetro y devuelve un componente. El componente devuelto renderiza el componente que se le pasa como parámetro dentro de un layout.
+
+Es un patrón que nos permite reutilizar código y así podemos inyectar funcionalidad, estilos o cualquier otra cosa a un componente de forma sencilla.
+
+Con la llegada de los hooks, los HOCs se han vuelto menos populares, pero todavía se usan en algunos casos.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué son las render props?</i></summary>
+<p>
+
+Son un patrón de diseño de React que nos permite reutilizar código entre componentes e inyectar información en el renderizado de los componentes.
+
+```jsx
+<DataProvider render={data => (
+  <h1>Hello {data.target}</h1>
+)}/>
+```
+
+En este caso, el componente `DataProvider` recibe una función `render` como prop. Ahí le indicamos qué es lo que debe renderizar usando la información que recibe como parámetro.
+
+La implementación del `DataProvider` con funciones podría ser la siguiente:
+
+```jsx
+function DataProvider({ render }) {
+  const data = { target: 'world' }
+  return render(data)
+}
+```
+
+También se puede encontrar este patrón usando la prop `children` en los componentes.
+
+```jsx
+<DataProvider>
+  {data => (
+    <h1>Hello {data.target}</h1>
+  )}
+</DataProvider>
+```
+
+Y la implementación sería similar:
+
+```jsx
+function DataProvider({ children }) {
+  const data = { target: 'world' }
+  return children(data)
+}
+```
+
+Este patrón es usado por grandes bibliotecas como `react-router`, `formik` o `react-motion`.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Por qué no podemos usar un `if` en el renderizado de un componente?</i></summary>
+<p>
+
+En React, no podemos usar un `if` en el renderizado de un componente porque no es una expresión válida de JavaScript, es una declaración. Las expresiones son aquellas que devuelven un valor y las declaraciones no devuelven ningún valor.
+
+En JSX solo podemos usar expresiones, por eso usamos ternarias, que sí son expresiones.
+
+```jsx
+// ❌ Esto no funciona
+function Button({ text }) {
+  return (
+    <button>
+      {if (text) { return text } else { return 'Click' }}
+    </button>
+  )
+}
+```
+
+De la misma forma, tampoco podemos usar `for`, `while` o `switch` dentro del renderizado de un componente.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Por qué debemos utilizar una función para actualizar el estado de React?</i></summary>
+<p>
+
+A la hora de actualizar el estado de React, debemos utilizar la función que nos facilita el hook `useState` para actualizar el estado.
+
+```jsx
+const [count, setCount] = useState(0)
+
+setCount(count + 1)
+```
+
+¿Por qué es esto necesario? En primer lugar, el estado en React debe ser inmutable. Es decir, no podemos modificar el estado directamente, sino que debemos siempre crear un nuevo valor para el nuevo estado.
+
+Esto nos permite que la integridad de la UI respecto a los datos que renderiza siempre es correcta.
+
+Por otro lado, llamar a una función le permite a React saber que el estado ha cambiado y que debe re-renderizar el componente si es necesario. Además esto lo hace de forma asíncrona, por lo que podemos llamar a `setCount` tantas veces como queramos y React se encargará de actualizar el estado cuando lo considere oportuno.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué es el ciclo de vida de un componente en React?</i></summary>
+<p>
+
+En los componentes de clase, el ciclo de vida de un componente se divide en tres fases:
+
+- Montaje: cuando el componente se añade al DOM.
+- Actualización: cuando el componente se actualiza.
+- Desmontaje: cuando el componente se elimina del DOM.
+
+Dentro de este ciclo de vida, existe un conjunto de métodos que se ejecutan en el componente.
+
+Estos métodos se definen en la clase y se ejecutan en el orden que se muestran a continuación:
+
+- constructor
+- render
+- componentDidMount
+- componentDidUpdate
+- componentWillUnmount
+
+En cada uno de estos métodos podemos ejecutar código que nos permita controlar el comportamiento de nuestro componente.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Por qué puede ser mala práctica usar el <strong>index</strong> como key en un listado de React?</i></summary>
+<p>
+
+Cuando renderizamos una lista de elementos, React necesita saber qué elementos han cambiado, han sido añadidos o eliminados.
+
+Para ello, React necesita una key única para cada elemento de la lista. Si no le pasamos una key, React usa el índice del elemento como key.
+
+```jsx
+const List = () => {
+  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3'])
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>{item}</li>
+      ))}
+    </ul>
+  )
+}
+```
+
+En este caso, React usa el índice del elemento como `key`. Esto puede ser un problema si la lista se reordena o se eliminan elementos del array, ya que el índice de los elementos cambia.
+
+En este caso, React no sabe qué elementos han cambiado y puede que se produzcan errores.
+
+Un ejemplo donde se ve el problema:
+
+```jsx
+const List = () => {
+  const [items, setItems] = useState(['Item 1', 'Item 2', 'Item 3'])
+
+  const handleRemove = (index) => {
+    const newItems = [...items]
+    newItems.splice(index, 1)
+    setItems(newItems)
+  }
+
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={index}>
+          {item}
+          <button onClick={() => handleRemove(index)}>Eliminar</button>
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Para qué sirve el hook <strong>useMemo</strong>?</i></summary>
+<p>
+
+El hook `useMemo` es un hook que nos permite memorizar el resultado de una función. Esto quiere decir que si la función que le pasamos como parámetro no ha cambiado, no se ejecuta de nuevo y se devuelve el resultado que ya se había calculado.
+
+```jsx
+import { useMemo } from 'react'
+
+function Counter({ count }) {
+  const double = useMemo(() => count * 2, [count])
+
+  return (
+    <div>
+      <p>Contador: {count}</p>
+      <p>Doble: {double}</p>
+    </div>
+  )
+}
+```
+
+En este caso, el componente `Counter` recibe una prop `count` que es un número. El componente calcula el doble de ese número y lo muestra en pantalla.
+
+El hook `useMemo` recibe dos parámetros: una función y un array de dependencias. La función se ejecuta cuando el componente se renderiza por primera vez y cuando alguna de las dependencias cambia.
+
+La función se ejecuta cuando el componente se renderiza por primera vez y cuando la prop `count` cambia.
+
+La ventaja es que si la prop `count` no cambia, se evita el cálculo del doble y se devuelve el valor que ya se había calculado previamente.
 
 </p>
 </details>
@@ -817,50 +2435,7 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 <br>
 
 ---
-<li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
-<li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
-<li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
-<li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 </ol>
 </details>
 
@@ -871,6 +2446,28 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 ---
 <p>
 <ol start= '1'>
+<li>
+<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<p>
+Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<p>
+Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+</p>
+</details>
+</li>
+<br>
+
+---
 <li>
 <details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
 <p>
