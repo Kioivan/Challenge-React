@@ -1916,17 +1916,6 @@ useEffect(() => {
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
-<li>
 <details><summary><i>¿Cuáles son las reglas de los hooks en React?</i></summary>
 <p>
 
@@ -2200,7 +2189,7 @@ Este patrón es usado por grandes bibliotecas como `react-router`, `formik` o `r
 
 ---
 <li>
-<details><summary><i>¿Por qué no podemos usar un `if` en el renderizado de un componente?</i></summary>
+<details><summary><i>¿Por qué no podemos usar un <strong>if</strong> en el renderizado de un componente?</i></summary>
 <p>
 
 En React, no podemos usar un `if` en el renderizado de un componente porque no es una expresión válida de JavaScript, es una declaración. Las expresiones son aquellas que devuelven un valor y las declaraciones no devuelven ningún valor.
@@ -2370,9 +2359,10 @@ La ventaja es que si la prop `count` no cambia, se evita el cálculo del doble y
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Es buena idea usar siempre `useMemo` para optimizar nuestros componentes?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+No. `useMemo` es una herramienta que nos permite optimizar nuestros componentes, pero no es una herramienta mágica que nos va a hacer que nuestros componentes sean más rápidos. A veces el cálculo de un valor es tan rápido que no merece la pena memorizarlo. Incluso, en algunos casos, puede ser más lento memorizarlo que calcularlo de nuevo.
 
 </p>
 </details>
@@ -2381,9 +2371,35 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Para qué sirve el hook `useCallback`?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+El hook `useCallback` es un hook que nos permite memorizar una función. Esto quiere decir que si la función que le pasamos como parámetro no ha cambiado, no se ejecuta de nuevo y se devuelve la función que ya se había calculado.
+
+```jsx
+import { useCallback } from 'react'
+
+function Counter({ count, onIncrement }) {
+  const handleIncrement = useCallback(() => {
+    onIncrement(count)
+  }, [count, onIncrement])
+
+  return (
+    <div>
+      <p>Contador: {count}</p>
+      <button onClick={handleIncrement}>Incrementar</button>
+    </div>
+  )
+}
+```
+
+En este caso, el componente `Counter` recibe una prop `count` que es un número y una prop `onIncrement` que es una función que se ejecuta cuando se pulsa el botón.
+
+El hook `useCallback` recibe dos parámetros: una función y un array de dependencias. La función se ejecuta cuando el componente se renderiza por primera vez y cuando alguna de las dependencias cambia.
+
+La función se ejecuta cuando el componente se renderiza por primera vez y cuando la prop `count` o la prop `onIncrement` cambia.
+
+La ventaja es que si la prop `count` o la prop `onIncrement` no cambian, se evita la creación de una nueva función y se devuelve la función que ya se había calculado previamente.
 
 </p>
 </details>
@@ -2392,9 +2408,10 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Es buena idea usar siempre `useCallback` para optimizar nuestros componentes?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+No. `useCallback` es una herramienta que nos permite optimizar nuestros componentes, pero no es una herramienta mágica que nos va a hacer que nuestros componentes sean más rápidos. A veces la creación de una función es tan rápida que no merece la pena memorizarla. Incluso, en algunos casos, puede ser más lento memorizarla que crearla de nuevo.
 
 </p>
 </details>
@@ -2403,9 +2420,20 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Cuál es la diferencia entre `useCallback` y `useMemo`?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+La diferencia entre `useCallback` y `useMemo` es que `useCallback` memoriza una función y `useMemo` memoriza el resultado de una función.
+
+En cualquier caso, en realidad, `useCallback` es una versión especializada de `useMemo`. De hecho se puede simular la funcionalidad de `useCallback` con `useMemo`:
+
+```js
+const memoizedCallback = useMemo(() => {
+  return () => {
+    doSomething(a, b)
+  }
+}, [a, b])
+```
 
 </p>
 </details>
@@ -2414,9 +2442,22 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué es el `StrictMode` en React?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+El `StrictMode` es un componente que nos permite activar algunas comprobaciones de desarrollo en React. Por ejemplo, detecta componentes que se renderizan de forma innecesaria o funcionalidades obsoletas que se están usando.
+
+```jsx
+import { StrictMode } from 'react'
+
+function App() {
+  return (
+    <StrictMode>
+      <Component />
+    </StrictMode>
+  )
+}
+```
 
 </p>
 </details>
@@ -2425,9 +2466,68 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Por qué es recomendable usar exportar los componentes de React de forma nombrada?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Los componentes de React se pueden exportar de dos formas:
+
+- Exportación por defecto
+- Exportación nombrada
+
+Para exportar un componente por defecto, usamos la palabra reservada `default`:
+
+```jsx
+// button.jsx
+export default function Button() {
+  return <button>Click</button>
+}
+
+// App.jsx
+import Button from './button.jsx'
+
+function App() {
+  return <Button />
+}
+```
+
+La gran desventaja que tiene la exportación por defecto es que a la hora de importarlo puedes usar cualquier nombre que quieras. Y esto trae problemas, ya que puedes no usar siempre el mismo en el proyecto o usar un nombre que no sea correcto con lo que importas.
+
+```jsx
+// button.jsx
+export default function Button() {
+  return <button>Click</button>
+}
+
+// App.jsx
+import MiBoton from './button.jsx'
+
+function App() {
+  return <MiBoton />
+}
+
+// Otro.jsx
+import Button from './button.jsx'
+
+function Otro() {
+  return <Button />
+}
+```
+
+Los exports nombrados nos obligan a usar el mismo nombre en todos los archivos y, por tanto, nos aseguramos que siempre estamos usando el nombre correcto.
+
+```jsx
+// button.jsx
+export function Button() {
+  return <button>Click</button>
+}
+
+// App.jsx
+import { Button } from './button.jsx'
+
+function App() {
+  return <Button />
+}
+```
 
 </p>
 </details>
@@ -2435,7 +2535,51 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 <br>
 
 ---
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<li>
+<details><summary><i>¿Cómo puedes exportar múltiples componentes de un mismo archivo?</i></summary>
+<p>
+
+Para exportar múltiples componentes de un mismo archivo, podemos usar la exportación nombrada:
+
+```jsx
+// button.jsx
+export function Button({children}) {
+  return <button>{children}</button>
+}
+
+export function ButtonSecondary() {
+  return <button class="btn-secondary">{children}</button>
+}
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Qué es el `SyntheticEvent` en React?</i></summary>
+<p>
+
+El `SyntheticEvent` es una abstracción del evento nativo del navegador. Esto le permite a React tener un comportamiento consistente en todos los navegadores.
+
+```jsx
+function App() {
+  function handleClick(event) {
+    console.log(event)
+  }
+
+  return <button onClick={handleClick}>Haz clic aquí</button>
+}
+```
+
+</p>
+</details>
+</li>
+<br>
+
+---
 </ol>
 </details>
 
@@ -2447,9 +2591,20 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 <p>
 <ol start= '1'>
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Es React una biblioteca o un framework? ¿Por qué?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Existe una fina línea hoy en día entre qué es una biblioteca o un framework. Oficialmente, React se autodenomina como biblioteca. Esto es porque para poder crear una aplicación completa, necesitas usar otras bibliotecas.
+
+Por ejemplo, *React* no ofrece un sistema de enrutado de aplicaciones oficial. Por ello, hay que usar una biblioteca como [React Router](https://reactrouter.com/) o usar un *framework* como [Next.js](https://nextjs.org/) que ya incluye un sistema de enrutado.
+
+Tampoco puedes usar React para añadir las cabeceras que van en el `<head>` en tu aplicación, y también necesitarás otra biblioteca u framework para solucionar esto.
+
+Otra diferencia es que React no está opinionado sobre qué empaquetador de aplicaciones usar. En cambio `Angular` en su propio tutorial ya te indica que debes usar `@angular/cli` para crear una aplicación, en cambio React siempre te deja la libertad de elegir qué empaquetador usar y ofrece diferentes opciones.
+
+Aún así, existe gente que considera a React como un framework. Aunque no hay una definición oficial de qué es un framework, la mayoría de la gente considera que un framework es una biblioteca que incluye otras bibliotecas para crear una aplicación completa de forma opinionada y casi sin configuración.
+
+Por ejemplo, **Next.js se podría considerar un framework de React** porque incluye React, un sistema de enrutado, un sistema de renderizado del lado del servidor, etc.
 
 </p>
 </details>
@@ -2458,9 +2613,36 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Para qué sirve el hook `useImperativeHandle`?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Nos permite definir qué propiedades y métodos queremos que sean accesibles desde el componente padre.
+
+En el siguiente ejemplo vamos a crear un componente `TextInput` que tiene un método `focus` que cambia el foco al elemento `<input>`.
+
+```jsx
+import { useRef, useImperativeHandle } from 'react'
+
+function TextInput(props, ref) {
+  const inputEl = useRef(null)
+
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputEl.current.focus()
+    }
+  }))
+
+  return (
+    <input ref={inputEl} type="text" />
+  )
+}
+```
+
+Creamos una referencia `inputEl` con `useRef` y la pasamos al elemento `<input>` como prop `ref`. Cuando el componente se monta, la referencia `inputEl` apunta al elemento `<input>` del DOM.
+
+Para acceder al elemento del DOM, usamos la propiedad `current` de la referencia.
+
+Para que el componente padre pueda acceder al método `focus`, usamos el hook `useImperativeHandle`. Este hook recibe dos parámetros: una referencia y una función que devuelve un objeto con las propiedades y métodos que queremos que sean accesibles desde el componente padre.
 
 </p>
 </details>
@@ -2469,9 +2651,32 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué son los portales en React?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Los portales nos permiten renderizar un componente en un nodo del DOM que no es hijo del componente que lo renderiza.
+
+Es perfecto para ciertos casos de uso como, por ejemplo, modales:
+
+```jsx
+import { createPortal } from 'react-dom'
+
+function Modal() {
+  return createPortal(
+    <div className="modal">
+      <h1>Modal</h1>
+    </div>,
+    document.getElementById('modal')
+  )
+}
+```
+
+`createPortal` acepta dos parámetros:
+
+- El primer parámetro es el componente que queremos renderizar
+- El segundo parámetro es el nodo del DOM donde queremos renderizar el componente
+
+En este caso el modal se renderiza en el nodo `#modal` del DOM.
 
 </p>
 </details>
@@ -2480,9 +2685,15 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué problemas crees que pueden aparecer en una aplicación al querer visualizar listas de miles/millones de datos?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+- **Tiempo de respuesta del servidor:** Hacer peticiones de millones de datos no es, en general, una buena estrategía. Incluso en el mejor de los casos, en el que el servidor solo debe devolver los datos sin tratarlos, hay un coste asociado al *parseo* y *envío* de los mismos a través de la red. Llamadas con un tamaño desmesurado pueden incurrir en interfaces lentas, e incluso en *timeouts* en la respuesta.
+- **Problemas de rendimiento:** Aunque es cierto que **React** se basa en un modelo *declarativo* en el cual no debemos tener una exhaustivo control o gestión de cómo se *renderiza* no hay que olvidar que malas decisiones técnicas pueden conllevar aplicaciones totalmente inestables incluso con las mejores tecnologías. No es viable *renderizar* un *DOM* con millones de elementos, el *navegador* no podrá gestionarlo y, tarde o temprano, la aplicación no será usable.
+
+ Como developers, nuestra misión es encontrar el equilibrio entre rendimiento y experiencia, intentando priorizar siempre cómo el usuario sentirá la aplicación. No hay ningún caso lo suficientemente justificado para *renderizar* en pantalla miles de datos.
+
+ **El espacio de visualización es limitado (*viewport*), al igual que deberían serlo los datos que añadimos al DOM.**
 
 </p>
 </details>
@@ -2491,9 +2702,20 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué solución/es implementarías para evitar problemas de rendimiento al trabajar con listas de miles/millones de datos?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+### Pagination
+
+En lugar de recibir la lista en una sola llamada a la API (lo cual sería negativo tanto para el rendimiento como para el propio servidor y tiempo de respuesta de la API), podríamos implementar un sistema de paginación en el cual la API recibirá un *offset* o *rango* de datos deseados. En el FE nuestra responsabilidad es mostrar unos controles adecuados (interfaz de paginación) y gestionar las llamadas a petición de cambio de página para siempre limitar la cantidad de DOM renderizado evitando así una sobrecarga del *DOM* y, por lo tanto, problemas de rendimiento.
+
+### Virtualization
+
+Existe una técnica llamada *Virtualización* que gestiona cuantos elementos de una lista mantenemos ***vivos*** en el *DOM*. El concepto se basa en solo montar los elementos que estén dentro del *viewport* más un *buffer* determinado (para evitar falta de datos al hacer scroll) y, en cambio, desmontar del *DOM* todos aquellos elementos que estén fuera de la vista del usuario. De este modo podremos obtener lo mejor de los dos mundos, una experiencia integrada y un DOM liviano que evitará posibles errores de rendimiento. Con esta solución también podremos aprovechar que contamos con los datos en memoria para realizar búsquedas/filtrados sin necesidad de más llamadas al servidor.
+
+Puedes consultar esta librería para aplicar Virtualización con React: [React Virtualized](https://github.com/bvaughn/react-virtualized).
+
+Hay que tener en cuenta que cada caso de uso puede encontrar beneficios y/o perjuicios en ambos métodos, dependiendo de factores como capacidad de respuesta de la API, cantidad de datos, necesidad de filtros complejos, etc. Por ello es importante analizar cada caso con criterio.
 
 </p>
 </details>
@@ -2502,9 +2724,24 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué es el hook `useDebugValue`?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Nos permite mostrar un valor personalizado en la pestaña de *React DevTools* que nos permitirá depurar nuestro código.
+
+```jsx
+import { useDebugValue } from 'react'
+
+function useCustomHook() {
+  const value = 'custom value'
+  useDebugValue(value)
+  return value
+}
+```
+
+En este ejemplo, el valor personalizado que se muestra en la pestaña de *React DevTools* es `custom value`.
+
+Aunque es útil para depurar, no se recomienda usar este hook en producción.
 
 </p>
 </details>
@@ -2513,9 +2750,31 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué es el `Profiler` en React?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+El `Profiler` es un componente que nos permite medir el tiempo que tarda en renderizarse un componente y sus hijos.
+
+```jsx
+import { Profiler } from 'react'
+
+function App() {
+  return (
+    <Profiler id="App" onRender={(id, phase, actualDuration) => {
+      console.log({id, phase, actualDuration})
+    }}>
+      <Component />
+    </Profiler>
+  )
+}
+```
+
+El componente `Profiler` recibe dos parámetros:
+
+- `id`: es un identificador único para el componente
+- `onRender`: es una función que se ejecuta cada vez que el componente se renderiza
+
+Esta información es muy útil para detectar componentes que toman mucho tiempo en renderizarse y optimizarlos.
 
 </p>
 </details>
@@ -2524,9 +2783,16 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Cómo puedes acceder al evento nativo del navegador en React?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+React no expone el evento nativo del navegador. En su lugar, React crea un objeto sintético que se basa en el evento nativo del navegador llamado `SyntheticEvent`. Para acceder al evento nativo del navegador, debemos usar el atributo `nativeEvent`:
+
+```jsx
+function Button({ onClick }) {
+  return <button onClick={e => onClick(e.nativeEvent)}>Haz clic aquí</button>
+}
+```
 
 </p>
 </details>
@@ -2535,9 +2801,16 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Cómo puedes registrar un evento en la fase de captura en React?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+En React, los eventos se registran en la fase de burbuja por defecto. Para registrar un evento en la fase de captura, debemos añadir `Capture` al nombre del evento:
+
+```jsx
+function Button({ onClick }) {
+  return <button onClickCapture={onClick}>Haz clic aquí</button>
+}
+```
 
 </p>
 </details>
@@ -2546,9 +2819,47 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Cómo puedes mejorar el rendimiento del Server Side Rendering en React para evitar que bloquee el hilo principal?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+Aunque puedes usar el método `renderToString` para renderizar el HTML en el servidor, este método es síncrono y bloquea el hilo principal. Para evitar que bloquee el hilo principal, debemos usar el método `renderToPipeableStream`:
+
+```jsx
+let didError = false
+const stream = renderToPipeableStream(
+  <App />,
+  {
+    onShellReady() {
+      // El contenido por encima de los límites de Suspense ya están listos
+      // Si hay un error antes de empezar a hacer stream, mostramos el error adecuado
+      res.statusCode = didError ? 500 : 200
+      res.setHeader('Content-type', 'text/html')
+      stream.pipe(res)
+    },
+    onShellError(error) {
+      // Si algo ha ido mal al renderizar el contenido anterior a los límites de Suspense, lo indicamos.
+      res.statusCode = 500
+      res.send(
+        '<!doctype html><p>Loading...</p><script src="clientrender.js"></script>'
+      )
+    },
+    onAllReady() {
+      // Si no quieres hacer streaming de los datos, puedes usar
+      // esto en lugar de onShellReady. Esto se ejecuta cuando
+      // todo el HTML está listo para ser enviado.
+      // Perfecto para crawlers o generación de sitios estáticos
+
+      // res.statusCode = didError ? 500 : 200
+      // res.setHeader('Content-type', 'text/html')
+      // stream.pipe(res)
+    },
+    onError(err) {
+      didError = true
+      console.error(err)
+    },
+  }
+)
+```
 
 </p>
 </details>
@@ -2557,9 +2868,64 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué diferencia hay entre <strong>renderToStaticNodeStream()</strong> y <strong>renderToPipeableStream()</strong>?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
+
+`renderToStaticNodeStream()` devuelve un stream de nodos estáticos, esto significa que no añade atributos extras para el DOM que React usa internamente para poder lograr la hidratación del HTML en el cliente. Esto significa que no podrás hacer el HTML interactivo en el cliente, pero puede ser útil para páginas totalmente estáticas.
+
+`renderToPipeableStream()` devuelve un stream de nodos que contienen atributos del DOM extra para que React pueda hidratar el HTML en el cliente. Esto significa que podrás hacer el HTML interactivo en el cliente pero puede ser más lento que `renderToStaticNodeStream()`.
+</p>
+</details>
+</li>
+<br>
+
+---
+<li>
+<details><summary><i>¿Para qué sirve el método `renderToReadableStream()`?</i></summary>
+<p>
+
+Este método es similar a `renderToNodeStream`, pero está pensado para entornos que soporten Web Streams como Deno.
+
+Un ejemplo de uso sería el siguiente:
+
+```jsx
+const controller = new AbortController()
+const { signal } = controller
+
+let didError = false
+
+try {
+  const stream = await renderToReadableStream(
+    <html>
+      <body>Success</body>
+    </html>,
+    {
+      signal,
+      onError(error) {
+        didError = true
+        console.error(error)
+      }
+    }
+  )
+
+  // Si quieres enviar todo el HTML en vez de hacer streaming, puedes usar esta línea
+  // Es útil para crawlers o generación estática:
+  // await stream.allReady
+
+  return new Response(stream, {
+    status: didError ? 500 : 200,
+    headers: {'Content-Type': 'text/html'},
+  })
+} catch (error) {
+  return new Response(
+    '<!doctype html><p>Loading...</p><script src="clientrender.js"></script>',
+    {
+      status: 500,
+      headers: {'Content-Type': 'text/html'},
+    }
+  )
+}
+```
 
 </p>
 </details>
@@ -2568,26 +2934,16 @@ Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptate
 
 ---
 <li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
+<details><summary><i>¿Qué es Flux?</i></summary>
 <p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
 
+*Flux* es un patrón de arquitectura de aplicaciones que se basa en un unidireccional de datos. En este patrón, los datos fluyen en una sola dirección: de las vistas a los stores.
+
+No es específico de React y se puede usar con cualquier librería de vistas. En este patrón, los stores son los encargados de almacenar los datos de la aplicación. Los stores emiten eventos cuando los datos cambian. Las vistas se suscriben a estos eventos para actualizar los datos.
+
+Esta arquitectura fue creada por Facebook para manejar la complejidad de sus aplicaciones. *Redux* se basó en este patrón para crear una biblioteca de gestión de estado global.
 </p>
 </details>
 </li>
-<br>
-
----
-<li>
-<details><summary><i>¿xxxxxxxxxxxxxxxxxxx?</i></summary>
-<p>
-Lorem ipsum dolor sit amet. Sed fugit minus ea corrupti distinctio eum voluptatem possimus est tenetur distinctio ab dolor deleniti et quasi iste. Ea optio quae ut officiis molestias id maiores impedit ab nemo odio ut eligendi obcaecati sed sunt magni. Eum quas quasi et aperiam omnis ut officia esse in quaerat tempora nam quia consequatur eum dolore omnis nam ipsa quasi. A labore velit ex impedit quisquam vel porro dolorum ut quia odit est illo eaque? Ut ipsa quia At reiciendis officia sit tempore omnis ad quisquam officiis non internos galisum et omnis iure sit facere nihil. Ut dolore voluptatem id voluptatibus consequuntur est expedita voluptas ut minus magni. At quia iure et cupiditate quia vel eveniet suscipit! Id voluptatem consectetur qui exercitationem eius et velit rerum et galisum unde et quam consequuntur et inventore velit! Sed quis illum a illo quisquam ea error sint est earum nihil. Et eligendi perspiciatis et ducimus error ea rerum harum. Non maxime consectetur qui incidunt dolores ut saepe sapiente quo atque suscipit At voluptas inventore.
-
-</p>
-</details>
-</li>
-<br>
-
----
 </ol>
 </details>
