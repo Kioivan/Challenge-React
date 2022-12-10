@@ -1,6 +1,4 @@
 <div align='center'>
-<br>
-<br>
 <img height="60" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/539px-React-icon.svg.png">
 <h2>Preguntas de entrevista técnica React</h2>
 
