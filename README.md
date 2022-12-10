@@ -20,7 +20,7 @@ _Para llegar a ellas deberas ir desplegando cada una de las secciones hasta la p
 <li>
 <details><summary><i>Requisitos para dominar React</i></summary>
 <p>
-<ol>
+<ol start= '1'>
 <li>
 <details><summary><i>¿JavaScript que necesitas para aprender React?</i></summary>
 <p>
